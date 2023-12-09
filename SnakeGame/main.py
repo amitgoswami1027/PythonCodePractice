@@ -1,9 +1,15 @@
-from turtle import Screen,Turtle
+from turtle import Screen
+from snake import Snake
+from food import Food
+from scoreboard import Scoreboard
+
+import time
 
 screen = Screen()
 screen.setup(width=600,height=600)
 screen.bgcolor("black")
 screen.title("My Snake Game")
+screen.tracer(0)
 
 #segment_1 = Turtle("square")
 #segment_1.color("white")
@@ -16,22 +22,36 @@ screen.title("My Snake Game")
 #segment_3.color("white")
 #segment_3.goto(-40,0)
 
-# Step-01 Create the snake color
-starting_posiion = [(0,0) , (-20,0), (-40,0)]
+snake = Snake()
+food = Food()
+scoreboard = Scoreboard()
 
-for position in starting_posiion:
-    segment = Turtle("square")
-    segment.color("white")
-    segment.goto(position)
+screen.listen()
+screen.onkey(snake.up,"Up")
+screen.onkey(snake.down,"Down")
+screen.onkey(snake.right,"Right")
+screen.onkey(snake.left,"Left")
 
-# Step-02 : Move the snake
+is_game_on = True
+while is_game_on:
+    
+    screen.update()
+    time.sleep(0.1)
+    snake.move()
+    # How to move the snake
+    #for seg in segments:
+    #    seg.forward(20)
+    
 
-
-
-
-
-
-
+    # Detect collision with food
+    if snake.head.distance(food) < 15:
+        food.refresh()
+        scoreboard.increase_score()
+        
+    #Detect collision with wall
+    #if snake.head.xcor() > 290 or snake.head.xcor() < -290 or snake.head.ycor() > 290 or snake.head.ycor() < -290:
+     #   is_game_on = False
+        #scoreboard.game_over()
 
 
 screen.exitonclick()
