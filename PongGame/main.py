@@ -1,44 +1,52 @@
-from turtle import Screen, Turtle
+from turtle import Screen
 from paddle import Paddle
 from ball import Ball
+from scoreboard import Scoreboard
 import time
 
+# Create the Screen
 screen = Screen()
 screen.bgcolor("black")
 screen.setup(width=800, height=600)
 screen.title("Pong Game")
 screen.tracer(0)
 
-paddle = Turtle()
-paddle.shape("square")
-paddle.color("white")
-paddle.shapesize(stretch_wid= 5, stretch_len=1)
-paddle.penup()
-paddle.goto(350,0)
+#Create right and left paddles, Ball and Scoreboard
+r_paddle = Paddle((350,0))
+l_paddle = Paddle((-350,0))
+ball = Ball()
+scoreboard = Scoreboard()
 
 screen.listen()
-screen.onkey(go_up,"Up")
-screen.onkey(go_down,"Down")
-#screen.onkey(go_up,"Up")
-#screen.onkey(go_up,"Up")
+screen.onkey(r_paddle.go_up,"Up")
+screen.onkey(r_paddle.go_down,"Down")
+screen.onkey(l_paddle.go_up,"w")
+screen.onkey(l_paddle.go_down,"s")
 
-#l_paddle = Paddle(350,0)
-#r_paddle = Paddle(-350,0)
-l_paddle = Paddle()
-l_paddle.create_paddle(350,0)
-r_paddle = Paddle()
-r_paddle.create_paddle(-350,0)
-ball = Ball()
-
-
-
+# Create Main Game Logic using classes Paddle, Ball and Scoreboard
 game_is_on = True
-
 while game_is_on:
     time.sleep(.01)
     screen.update()
     ball.move()
     
+    #Detect the collision with the wall
+    if ball.xcor() > 280 or ball.ycor() < -280:
+        ball.bounce_y()
+
+    #Detech the collision the paddles
+    if ball.distance(r_paddle) < 50 and ball.xcor() > 320 or ball.distance(l_paddle) < 50 and ball.xcor() > 320:
+        ball.bounce_x()
+
+    #Detect R paddle misses
+    if ball.xcor() > 380:
+        ball.reset_position()
+        scoreboard.l_point()
+    
+    #Detech L Paddle misses
+    if ball.xcor() < -380:
+        ball.reset_position()
+        scoreboard.r_point()
 
 
 screen.exitonclick()
