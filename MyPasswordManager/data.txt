@@ -1,0 +1,5 @@
+abc.com|amit@gmail.com|12345
+def.com|b@gmail.com|12345
+123.com|amit@gmail.com|123
+1234.com|amit@gmail.com|1234
+|amit@gmail.com|
